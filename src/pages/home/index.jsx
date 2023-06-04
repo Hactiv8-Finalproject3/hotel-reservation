@@ -1,0 +1,59 @@
+import React from "react";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Ionicons } from "@expo/vector-icons";
+import IndexProfile from "../profile/IndexProfile";
+import Favorite from "../favorite/Favorite";
+import Home from "./Home";
+
+const Tab = createBottomTabNavigator();
+
+const BotNavigation = () => {
+  return (
+    <Tab.Navigator
+      initialRouteName="Home"
+      screenOptions={{
+        tabBarActiveTintColor: "#e91e63",
+        headerTintColor: "#fff",
+        headerStyle: { backgroundColor: "#f4511e" },
+      }}
+    >
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          tabBarLabel: "Home",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home" color={color} size={size} />
+          ),
+          headerTitleAlign: "center",
+        }}
+      />
+
+      <Tab.Screen
+        name="Favorites"
+        component={Favorite}
+        options={{
+          tabBarLabel: "Favorites",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="heart" color={color} size={size} />
+          ),
+          headerTitleAlign: "center",
+        }}
+      />
+
+      <Tab.Screen
+        name="IndexProfile"
+        component={IndexProfile}
+        options={() => ({
+          tabBarLabel: "Profile",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person" color={color} size={size} />
+          ),
+          heaedrShown: false,
+        })}
+      />
+    </Tab.Navigator>
+  );
+};
+
+export default BotNavigation;
