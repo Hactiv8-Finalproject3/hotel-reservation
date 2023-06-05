@@ -1,14 +1,12 @@
 import axios from "axios";
 
-const apiKey = process.env.REACT_APP_API_KEY;
-const apiHost = process.env.REACT_APP_API_HOST;
 
 const http = axios.create({
-    baseUrl : "https://priceline-com-provider.p.rapidapi.com",
-    headers: {
-        'X-RapidAPI-Key': apiKey,
-        'X-RapidAPI-Host': apiHost
-      }
+  baseURL: "https://booking-com.p.rapidapi.com/",
+  headers: {
+    'X-RapidAPI-Key': '88e8acda90mshfade61ed5ec4a88p178b25jsn1b4ab26a2945',
+    'X-RapidAPI-Host': 'booking-com.p.rapidapi.com'
+  }
 });
 
 export default http;

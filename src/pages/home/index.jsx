@@ -1,4 +1,3 @@
-import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import IndexProfile from "../profile/IndexProfile";
@@ -7,14 +6,14 @@ import Home from "./Home";
 
 const Tab = createBottomTabNavigator();
 
-const BotNavigation = () => {
+const BottomNavigation = () => {
   return (
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={{
-        tabBarActiveTintColor: "#e91e63",
+        tabBarActiveTintColor: "#3b5998",
         headerTintColor: "#fff",
-        headerStyle: { backgroundColor: "#f4511e" },
+        headerStyle: { backgroundColor: "#3b5998" },
       }}
     >
       <Tab.Screen
@@ -49,6 +48,7 @@ const BotNavigation = () => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person" color={color} size={size} />
           ),
+          headerTitleAlign: "center",
           heaedrShown: false,
         })}
       />
@@ -56,4 +56,4 @@ const BotNavigation = () => {
   );
 };
 
-export default BotNavigation;
+export default BottomNavigation;
