@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import IndexHome from "../pages/home/index";
 import IndexProfile from "../pages/profile/IndexProfile";
-import Home from "../pages/home/home";
+import Home from "../pages/home/Home";
 
 const Tab = createBottomTabNavigator();
 
@@ -11,9 +11,9 @@ export default BottomNavigation = () => {
     <Tab.Navigator
       initialRouteName="IndexHome"
       screenOptions={{
-        tabBarActiveTintColor: "#e91e63",
+        tabBarActiveTintColor: "#3b5998",
         headerTintColor: "#fff",
-        headerStyle: { backgroundColor: "#f4511e" },
+        headerStyle: { backgroundColor: "#3b5998" },
       }}
     >
         <Tab.Screen
