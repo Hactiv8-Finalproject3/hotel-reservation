@@ -1,12 +1,10 @@
-import { StyleSheet, ScrollView, View, Text } from "react-native";
+import { StyleSheet, ScrollView, View, Text, Image } from "react-native";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import http from "../../service/http";
 import ItemFilter from "./ItemFilter";
-import Feed from "./Feed";
 import { useState } from "react";
 import dayjs from "dayjs";
-import CardItem from "../../components/CardItem";
 import {
   addfavoritehotel,
   removefavoritehotel,
@@ -24,7 +22,6 @@ const Home = ({ navigation }) => {
   const [inputCity, setInputCity] = useState("Jakarta");
   const [inputStartDate, setInputStartDate] = useState(Today);
   const [inputEndDate, setInputEndDate] = useState(Today);
-  const [hotels, setHotels] = useState([]);
   const [feeds, setFeeds] = useState([]);
 
   const handleConfirmSearch = () => {
@@ -64,16 +61,14 @@ const Home = ({ navigation }) => {
   };
 
   const getHotelSugestion = async () => {
-    const response = await http.get('v1/static/hotels', {
-      params: {page: '0'},
-    })
+    const response = await http.get("v1/static/hotels", {
+      params: { page: "0", Maximumpage: 7 },
+    });
 
-    setFeeds(response.data.result)
+    setFeeds(response.data.result);
   };
 
-  
-
-  console.log("ini feeds",feeds);
+  console.log("ini feeds", feeds);
 
   const handleClickCardItem = (id, price) => {
     navigation.navigate("Detail", { hotelId: id, price: price });
@@ -98,7 +93,6 @@ const Home = ({ navigation }) => {
     searchHotelByCity();
   }, []);
 
-
   return (
     <ScrollView style={styles.contaianer}>
       <ItemFilter
@@ -110,61 +104,28 @@ const Home = ({ navigation }) => {
         inputStartDate={inputStartDate}
         inputEndDate={inputEndDate}
       />
-      {/* <View style={styles.contaianer}>
-        {feeds.result.map((feed) => (
-          
-          <View>
-            <View>
-              <Image source={{ uri: feed.media.url }} />
-            </View>
-            <View>
-              <View>
-                <Text>{feed.name}</Text>
-              </View>
-              <View>
-                <Text>{feed.starRating}</Text>
-              </View>
-            </View>
-          </View>
-        ))}
-      </View> */}
       <View>
-      {
-        feeds && feeds.map((feed) => (
-          <View>
-            <View>
-              <Image source={{ uri: feed.media.url }} />
-            </View>
+        {feeds &&
+          feeds.map((feed) => (
             <View>
               <View>
-                <Text>{feed.name}</Text>
+                <Image
+                  source={{
+                    uri: require("../../../assets/hotel.jpg"),
+                  }}
+                  style={{ height: 100, width: "auto" }}
+                />
+              </View>
+              <View>
                 <View>
-                  <Text>{feed.starRating}</Text>
-                </View>
-                <View>
-                
+                  <Text>{feed.name}</Text>
+                  <View>
+                    <Text>{feed.address}</Text>
+                  </View>
+                  <View></View>
                 </View>
               </View>
             </View>
-          </View>
-        ))
-      }
-      </View>
-      <View style={{ marginBottom: 20 }}>
-        {hotels &&
-          hotels.map((hotel) => (
-            <CardItem
-              key={hotel.hotelId}
-              hotel={hotel}
-              name={hotel.name}
-              rating={hotel.starRating}
-              price={hotel.ratesSummary.minPrice}
-              image={hotel.media.url}
-              city={hotel.location.address.cityName.split(" ").pop()}
-              isFavorited={isFavorited(hotel.hotelId)}
-              handleClickCardItem={handleClickCardItem}
-              handleClickFavorite={handleClickFavorite}
-            />
           ))}
       </View>
     </ScrollView>
