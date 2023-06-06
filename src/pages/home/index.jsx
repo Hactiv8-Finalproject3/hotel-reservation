@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import IndexProfile from "../profile/IndexProfile";
 import Favorite from "../favorite/Favorite";
-import Home from "./Home";
+import Home from "./Home"
 
 const Tab = createBottomTabNavigator();
 

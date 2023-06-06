@@ -4,11 +4,7 @@ import { ListItem } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import useAuth from "../../lib/auth";
 import { SetAuthenticate, SetUser } from "../../features/Slicer/user";
-import ListGender from "./setting-part/ListGender"
 import ListInput from "./setting-part/ListInput";
-import ListPhone from "./setting-part/ListPhone";
-
-const GENDER_OPTIONS = ["Male", "Women"];
 
 const setting = ({ navigation }) => {
   const { isAuthenticated } = useAuth();
@@ -24,15 +20,6 @@ const setting = ({ navigation }) => {
     isOpen: false,
   });
   const [email, setEmail] = useState({
-    value: "",
-    isOpen: false,
-  });
-  const [gender, setGender] = useState({
-    value: "",
-    isOpen: false,
-  });
-  const [phoneNumberPrefix, setPhoneNumberPrefix] = useState("+62");
-  const [phoneNumber, setPhoneNumber] = useState({
     value: "",
     isOpen: false,
   });
@@ -60,20 +47,7 @@ const setting = ({ navigation }) => {
     setEmail({ isOpen: !email.isOpen, value: "" });
   };
 
-  const handleEditPhoneNumber = () => {
-    const userData = {
-      ...user,
-      phoneNumber: `${phoneNumberPrefix}${phoneNumber.value}`,
-    };
-    setPhoneNumber({ isOpen: !phoneNumber.isOpen, value: "" });
-    dispatch(SetUser(userData));
-  };
 
-  const handleEditGender = (value) => {
-    const userData = { ...user, gender: GENDER_OPTIONS[value] };
-    dispatch(SetUser(userData));
-    setGender({ isOpen: !gender.isOpen, value: GENDER_OPTIONS[value] });
-  };
 
   const handlePressAuth = () => {
     if (isAuthenticated) {
@@ -82,8 +56,6 @@ const setting = ({ navigation }) => {
           firstName: "",
           lastName: "",
           email: "",
-          gender: "",
-          phone: "",
         })
       );
       dispatch(SetAuthenticate(false));
@@ -121,25 +93,6 @@ const setting = ({ navigation }) => {
           setData={setEmail}
           handleOpenEdit={handleOpenEdit}
           handleEditData={handleEditEmail}
-        />
-        <ListGender
-          label="Gender"
-          value={user.gender}
-          data={gender}
-          setData={setGender}
-          options={GENDER_OPTIONS}
-          handleOpenEdit={handleOpenEdit}
-          handleEditData={handleEditGender}
-        />
-        <ListPhone
-          label="Phone number"
-          value={user.phoneNumber}
-          data={phoneNumber}
-          setData={setPhoneNumber}
-          prefix={phoneNumberPrefix}
-          setPhoneNumberPrefix={setPhoneNumberPrefix}
-          handleOpenEdit={handleOpenEdit}
-          handleEditData={handleEditPhoneNumber}
         />
       </View>
       <View style={[styles.listContainer, { marginTop: 30 }]}>

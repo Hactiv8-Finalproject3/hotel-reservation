@@ -1,15 +1,21 @@
-import { StyleSheet, ScrollView, View, Text, Image } from "react-native";
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import http from "../../service/http";
-import ItemFilter from "./ItemFilter";
 import { useState } from "react";
-import dayjs from "dayjs";
 import {
   addfavoritehotel,
   removefavoritehotel,
 } from "../../features/Slicer/hotels";
 import useAuth from "../../lib/auth";
+import { SearchBar, Button } from "react-native-elements";
 
 const Home = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -17,61 +23,34 @@ const Home = ({ navigation }) => {
 
   const favoriteHotels = useSelector((state) => state.hotels.hotels.favorite);
 
-  const Today = dayjs().format("YYYY-MM-DD");
-
-  const [inputCity, setInputCity] = useState("Jakarta");
-  const [inputStartDate, setInputStartDate] = useState(Today);
-  const [inputEndDate, setInputEndDate] = useState(Today);
   const [feeds, setFeeds] = useState([]);
+  const [city, setCity] = useState([]);
 
   const handleConfirmSearch = () => {
     searchCity();
-    getHotelSugestion();
+    getListHotel();
   };
 
   const searchCity = async () => {
-    const response = await http.get("v1/hotels/location-highlights", {
+    const response = await http.get("/v1/static/regions", {
       params: {
-        hotel_id: "1377073",
-        locale: "en-gb",
+        page: "0",
+        country: "id",
       },
     });
+    setCity(response.data.result.slice(0, 10));
   };
 
-  const searchHotelByCity = async (cityId) => {
-    const response = await http.get("v1/hotels/search", {
-      params: {
-        checkin_date: "2023-09-27",
-        dest_type: "city",
-        units: "metric",
-        checkout_date: "2023-09-28",
-        adults_number: "2",
-        order_by: "popularity",
-        dest_id: "-553173",
-        filter_by_currency: "AED",
-        locale: "en-gb",
-        room_number: "1",
-        children_number: "2",
-        children_ages: "5,0",
-        categories_filter_ids: "class::2,class::4,free_cancellation::1",
-        page_number: "0",
-        include_adjacency: "true",
-      },
-    });
-  };
-
-  const getHotelSugestion = async () => {
+  const getListHotel = async () => {
     const response = await http.get("v1/static/hotels", {
-      params: { page: "0", Maximumpage: 7 },
+      params: { page: "0" },
     });
 
-    setFeeds(response.data.result);
+    setFeeds(response.data.result.slice(0, 10));
   };
 
-  console.log("ini feeds", feeds);
-
-  const handleClickCardItem = (id, price) => {
-    navigation.navigate("Detail", { hotelId: id, price: price });
+  const handleDetailHotel = (getId) => {
+    navigation.navigate("DetailHotel", { hotel_Id: getId });
   };
 
   const handleClickFavorite = (hotel, isFavorited) => {
@@ -84,48 +63,102 @@ const Home = ({ navigation }) => {
   };
 
   const isFavorited = (id) => {
-    return favoriteHotels.some((hotel) => hotel.hotelId === id);
+    return favoriteHotels.find((hotel) => hotel.hotelId === id);
   };
 
   useEffect(() => {
-    getHotelSugestion();
+    getListHotel();
     searchCity();
-    searchHotelByCity();
   }, []);
 
   return (
     <ScrollView style={styles.contaianer}>
-      <ItemFilter
-        setInputCity={setInputCity}
-        setInputStartDate={setInputStartDate}
-        setInputEndDate={setInputEndDate}
-        handleConfirmSearch={handleConfirmSearch}
-        inputCity={inputCity}
-        inputStartDate={inputStartDate}
-        inputEndDate={inputEndDate}
-      />
+      <View style={[styles.container1, styles.boxShadow]}>
+        <SearchBar
+          placeholder="Bade kamana sir?"
+          lightTheme
+          platform="android"
+        />
+        <Button
+          title="Search"
+          onPress={handleConfirmSearch}
+          titleStyle={{ fontSize: 20 }}
+          buttonStyle={{
+            backgroundColor: "#ff5",
+            borderRadius: 10,
+            padding: 10,
+          }}
+          containerStyle={{
+            width: "100%",
+            marginTop: 10,
+          }}
+        />
+      </View>
+
+      <View style={{ paddingTop: 30, paddingBottom: 10 }}>
+        <Text style={styles.title}>Top Destination</Text>
+
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {city &&
+            city.map((kota) => (
+              <View key={kota.id} style={styles.destinationContainer}>
+                <Image
+                  source={require("../../../assets/kota.jpg")}
+                  style={styles.destinationImage}
+                />
+                <Text style={styles.title}>{kota.name}</Text>
+              </View>
+            ))}
+        </ScrollView>
+      </View>
+
+      <View style={{ paddingTop: 30, paddingBottom: 10 }}>
+        <Text style={styles.title}>Popular Destination</Text>
+
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {feeds &&
+            feeds.map((feed) => (
+              <View key={feed.id} style={styles.destinationContainer}>
+                <Image
+                  source={require("../../../assets/hotel1.jpg")}
+                  style={styles.destinationImage}
+                />
+                <Text style={styles.title}>{feed.name}</Text>
+              </View>
+            ))}
+        </ScrollView>
+      </View>
+
       <View>
         {feeds &&
           feeds.map((feed) => (
-            <View>
+            <TouchableOpacity
+              key={feed.id}
+             onPress={() => handleDetailHotel(feed.hotel_Id)}>
               <View>
                 <Image
                   source={{
                     uri: require("../../../assets/hotel.jpg"),
                   }}
-                  style={{ height: 100, width: "auto" }}
+                  style={{ height: 100, width: "100%" }}
                 />
               </View>
-              <View>
+              <View style={{ width: "55%" }}>
                 <View>
-                  <Text>{feed.name}</Text>
-                  <View>
-                    <Text>{feed.address}</Text>
-                  </View>
-                  <View></View>
+                  <Text style={styles.fontTitle}>{feed.name}</Text>
+                  <Text
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginBottom: 10,
+                    }}
+                  >
+                    {feed.address}
+                  </Text>
                 </View>
               </View>
-            </View>
+            </TouchableOpacity>
           ))}
       </View>
     </ScrollView>
@@ -133,9 +166,52 @@ const Home = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  container1: {
+    backgroundColor: "#00008B",
+    padding: 10,
+    borderRadius: 10,
+    width: "100%",
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  searchBar: {
+    borderRadius: 10,
+    padding: 10,
+  },
+
+  fontTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  boxShadow: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 10,
+  },
   contaianer: {
     backgroundColor: "#fff",
     padding: 10,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: "bold",
+    paddingHorizontal: 20,
+  },
+  destinationContainer: {
+    padding: 5,
+    borderRadius: 5,
+    backgroundColor: "#fff",
+  },
+  destinationImage: {
+    height: 120,
+    width: 200,
+    borderRadius: 10,
+    resizeMode: "contain",
   },
 });
 

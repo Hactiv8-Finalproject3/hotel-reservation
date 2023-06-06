@@ -2,15 +2,15 @@ import { useEffect,useState } from "react";
 import { TextInput, View, Picker, Text, StyleSheet, TouchableOpacity, ToastAndroid } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import http from "../../service/http";
-import { addorderedhotel } from "../../features/Slicer/hotels";
+import { addbookinghotel } from "../../features/Slicer/hotels";
 
-const Booking = ({ navigation, route }) => {
+const Booking = ({ navigation }) => {
 
   const dispatch = useDispatch()
   const user = useSelector(state => state.user.user)
 
-  const { hotelId, price } = route.params
-  const [detailHotel, setDetailHotel] = useState(null)
+  const { hotelId} = route.params
+  const [detailHotel, setDetailHotel] = useState()
   const [name, setName] = useState()
   const [email, setEmail] = useState('')
   const [days, setDays] = useState(1)
@@ -36,7 +36,7 @@ const Booking = ({ navigation, route }) => {
   };
 
   const handlePressBooking = () => {
-      dispatch(addorderedhotel({
+      dispatch (addbookinghotel({
           name,
           email,
           days,
