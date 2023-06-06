@@ -5,7 +5,7 @@ import {Ionicons} from '@expo/vector-icons'
 import { Provider } from 'react-redux'
 import { store } from './src/features';
 import IndexHome  from './src/pages/home'
-import Detail from './src/pages/detail/Detail'
+import DetailHotel from './src/pages/detail/DetailHotel'
 import Booking from './src/pages/booking/Booking'
 import Login from './src/pages/login/Login'
 
@@ -32,8 +32,8 @@ export default function App() {
           />
 
           <HomeStack.Screen
-            name='Detail'
-            component={Detail}
+            name='DetailHotel'
+            component={DetailHotel}
             options={() => ({
               headerShown: false,
             })}
