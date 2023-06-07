@@ -49,7 +49,7 @@ const BottomNavigation = () => {
             <Ionicons name="person" color={color} size={size} />
           ),
           headerTitleAlign: "center",
-          heaedrShown: false,
+          headerShown: false,
         })}
       />
     </Tab.Navigator>
