@@ -10,14 +10,14 @@ const IndexProfile = () => {
         <ProfileStack.Navigator
             initialRouteName='Profile'
             screenOptions={{
-                tabBarActiveTintColor: '#489687',
+                tabBarActiveTintColor: '#00008B',
                 headerTintColor: '#fff',
                 headerStyle: {
-                    backgroundColor: '#489687',
+                    backgroundColor: '#00008B',
                 },
             }}>
             <ProfileStack.Screen
-                name='Profile'
+                name='profile'
                 component={profile}
                 options={({ navigation }) => ({
                     headerLeft: () => (
@@ -32,7 +32,7 @@ const IndexProfile = () => {
                 })}
             />
             <ProfileStack.Screen
-                name='Setting'
+                name='setting'
                 component={setting}
                 options={({ navigation }) => ({
                     headerLeft: () => (

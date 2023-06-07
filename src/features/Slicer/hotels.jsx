@@ -1,25 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const hotels = createSlice({
-  name: "favorite",
-  initialState: {
+const initialState = {
+  hotels: {
     favorites: [],
     booking: [],
-    },
+  },
+};
+
+const hotels = createSlice({
+  name: "hotels",
+  initialState,
   reducers: {
     addfavoritehotel: (state, action) => {
-      const saveHotel = state.favorites.find(
-        (item) => item.hotel_id === action.payload.hotel_id
-      );
-      if (!saveHotel) {
-        state.favorites.push(action.payload);
-      }
+      state.hotels.favorites.push(action.payload);
     },
     removefavoritehotel: (state, action) => {
-      const removeHotel = state.favorites.filter(
-        (item) => item.hotel_id !== action.payload
-      );
-      state.favorites = removeHotel;
+      state.hotels.favorites = state.hotels.favorites.filter(
+        (hotel) => hotel.hotel_id !== action.payload
+        );
     },
     addbookinghotel: (state, action) => {
       state.hotels.booking.push(action.payload);

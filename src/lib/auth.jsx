@@ -1,11 +1,12 @@
-import { useSelector } from "react-redux";
+import { useSelector } from "react-redux"
 
-const fakeEmail = "admin@gmail.com"
-const fakePassword = "admin123"
+const emailexample = 'danirizky@gmail.com'
+const passwordexample = 'bodoamat'
+
 
 const useAuth = () => {
     const handleLogin = (email, password) => {
-        return (fakeEmail === email && fakePassword === password)
+        return (emailexample === email && passwordexample === password)
     }
 
     const isAuthenticated = useSelector((state) => state.user.isAuthenticated)

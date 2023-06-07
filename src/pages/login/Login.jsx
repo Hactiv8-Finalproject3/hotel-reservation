@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useState } from "react";
 import useAuth from "../../lib/auth"
 import { useDispatch } from "react-redux";
-import { SetAuthenticate, SetUser } from "../../features/Slicer/user";
+import { SetAuthenticated, SetUser } from "../../features/Slicer/user";
 
 const Login = ({ navigation }) => {
 
@@ -29,7 +29,7 @@ const Login = ({ navigation }) => {
                 password
             }
             dispatch(SetUser(user))
-            dispatch(SetAuthenticate(true))
+            dispatch(SetAuthenticated(true))
             if (navigation.canGoBack()) {
                 navigation.goBack()
             } else {
@@ -71,7 +71,7 @@ const Login = ({ navigation }) => {
                     title="Login"
                     titleStyle={{ fontWeight: '600' }}
                     buttonStyle={{
-                        backgroundColor: '#489687',
+                        backgroundColor: '#3f51b5',
                         borderColor: 'transparent',
                         borderWidth: 0,
                         borderRadius: 7,
@@ -91,7 +91,7 @@ const Login = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#489687',
+        backgroundColor: '#3f51b5',
     },
     textTitle: {
         fontSize: 25,
