@@ -14,7 +14,9 @@ const Favorite = ({ navigation }) => {
 
   return (
     <ScrollView style={styles.container}>
-      {favoriteHotels.map((hotel) => (
+      {
+        favoriteHotels.length > 0 ? (
+      favoriteHotels.map((hotel) => (
         <TouchableOpacity
           key={hotel.hotel_id}
           onPress={() => navigation.navigate("DetailHotel", hotel)}
@@ -42,7 +44,16 @@ const Favorite = ({ navigation }) => {
             </View>
           </View>
         </TouchableOpacity>
-      ))}
+      ))) :(
+
+        <View style={styles.containerNotFound}>
+            <Image 
+                source={require("../../../assets/not-found.png")}
+                style={{height: 200, width: 200}}
+            />
+            <Text style={styles.textNotFound}>No Favorite Hotel</Text>
+        </View>
+      )}
     </ScrollView>
   );
 };

@@ -113,7 +113,7 @@ const Home = ({ navigation }) => {
         {feeds &&
           feeds.map((feed) => (
             <TouchableOpacity
-              key={feed.hote_id}
+              key={feed.hotel_id}
              onPress={() => navigation.navigate("DetailHotel", feed)}>
               <View>
                 <Image

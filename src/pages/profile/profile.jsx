@@ -34,7 +34,7 @@ const profile = ({ navigation }) => {
               }}
             />
           ) : (
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>Login</Text>
+            <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom:10 }}>Anda Belum Login</Text>
           )}
 
           <View style={{ flex: 1, textAlign: "left", padding: 10 }}>
