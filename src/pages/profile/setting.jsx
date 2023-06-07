@@ -1,25 +1,31 @@
 import { useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
-import { ListItem } from "react-native-elements";
-import { useDispatch, useSelector } from "react-redux";
 import useAuth from "../../lib/auth";
-import { SetAuthenticate, SetUser } from "../../features/Slicer/user";
-import ListInput from "./setting-part/ListInput";
+import { useDispatch, useSelector } from "react-redux";
+import { SetAuthenticated, SetUser } from "../../features/Slicer/user";
+import ListInput from "./parts/ListInput";
+import ListPhone from "./parts/ListPhone";
+import { ListItem } from "react-native-elements";
 
 const setting = ({ navigation }) => {
   const { isAuthenticated } = useAuth();
-  const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
 
-  const [firstName, setFirstName] = useState({
+  const [fullname, setfullname] = useState({
     value: "",
     isOpen: false,
   });
-  const [lastName, setLastName] = useState({
+  const [email, setemail] = useState({
     value: "",
     isOpen: false,
   });
-  const [email, setEmail] = useState({
+  const [password, setpassword] = useState({
+    value: "",
+    isOpen: false,
+  });
+  const [phoneNumberPrefix, setPhoneNumberPrefix] = useState("+62");
+  const [phoneNumber, setPhoneNumber] = useState({
     value: "",
     isOpen: false,
   });
@@ -29,36 +35,32 @@ const setting = ({ navigation }) => {
     setData({ ...data, isOpen: !data.isOpen });
   };
 
-  const handleEditFirstName = () => {
-    const userData = { ...user, firstName: firstName.value };
+  const handleEditFullName = () => {
+    const userData = { ...user, fullname: fullname.value };
     dispatch(SetUser(userData));
-    setFirstName({ isOpen: !firstName.isOpen, value: "" });
+    setfullname({ isOpen: !fullname.isOpen, value: "" });
   };
 
-  const handleEditLastName = () => {
-    const userData = { ...user, lastName: lastName.value };
+  const handleEditPhoneNumber = () => {
+    const userData = {
+      ...user,
+      phoneNumber: `${phoneNumberPrefix}${phoneNumber.value}`,
+    };
+    setPhoneNumber({ isOpen: !phoneNumber.isOpen, value: "" });
     dispatch(SetUser(userData));
-    setLastName({ isOpen: !lastName.isOpen, value: "" });
   };
-
-  const handleEditEmail = () => {
-    const userData = { ...user, email: email.value };
-    dispatch(SetUser(userData));
-    setEmail({ isOpen: !email.isOpen, value: "" });
-  };
-
-
 
   const handlePressAuth = () => {
     if (isAuthenticated) {
       dispatch(
         SetUser({
-          firstName: "",
-          lastName: "",
+          fullname: "",
           email: "",
+          password: "",
+          phone: "",
         })
       );
-      dispatch(SetAuthenticate(false));
+      dispatch(SetAuthenticated(false));
     } else {
       navigation.replace("Login");
     }
@@ -67,34 +69,27 @@ const setting = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.listContainer}>
-        <Text style={[styles.textTitle, styles.textBold, { marginBottom: 10 }]}>
-          MY PROFILE
-        </Text>
+        <Text style={(styles.textTitle, styles.textBold)}>My Profile</Text>
         <ListInput
-          label="First name"
-          value={user.firstName}
-          data={firstName}
-          setData={setFirstName}
+          label="Full Name"
+          value={user.fullname}
+          data={fullname}
+          setData={setfullname}
           handleOpenEdit={handleOpenEdit}
-          handleEditData={handleEditFirstName}
+          handleEditData={handleEditFullName}
         />
-        <ListInput
-          label="Last name"
-          value={user.lastName}
-          data={lastName}
-          setData={setLastName}
+        <ListPhone
+          label="Phone Number"
+          value={user.phoneNumber}
+          data={phoneNumber}
+          setData={setPhoneNumber}
+          prefix={phoneNumberPrefix}
+          setPhoneNumberPrefix={setPhoneNumberPrefix}
           handleOpenEdit={handleOpenEdit}
-          handleEditData={handleEditLastName}
-        />
-        <ListInput
-          label="Email"
-          value={user.email}
-          data={email}
-          setData={setEmail}
-          handleOpenEdit={handleOpenEdit}
-          handleEditData={handleEditEmail}
+          handleEditData={handleEditPhoneNumber}
         />
       </View>
+
       <View style={[styles.listContainer, { marginTop: 30 }]}>
         <Text style={[styles.textTitle, styles.textBold]}>SUPPORT</Text>
         <ListItem bottomDivider>

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React from "react";
 import {
   ImageBackground,
   ScrollView,
@@ -7,92 +7,96 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import http from "../../service/http";
 import useAuth from "../../lib/auth";
-import { useDispatch, useSelector } from "react-redux";
 import {
   addfavoritehotel,
   removefavoritehotel,
   addbookinghotel,
 } from "../../features/Slicer/hotels";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import { useDispatch, useSelector } from "react-redux";
 
 const DetailHotel = ({ route, navigation }) => {
-  const hotel = route.params;
-
-  const dispatch = useDispatch();
+  const feed = route.params;
   const { isAuthenticated } = useAuth();
+  const dispatch = useDispatch();
 
-  const [detailHotel, setDetailHotel] = useState([]);
-
-  const getDetailHotel = async () => {
-    const response = await http.get("v2/hotels/details", {
-      params: {
-        hotel_id: "1676161",
-        currency: "AED",
-        locale: "en-gb",
-        checkout_date: "2023-09-28",
-        checkin_date: "2023-09-27",
-      },
-    });
-    setDetailHotel(response.data);
-    console.log(response.data);
-  };
-
-  const handleClickFavorite = () => {
-    dispatch(addfavoritehotel(hotel));
-    if (!isAuthenticated) {
-        return navigation.navigate("Login");
-  };
-
-  const handleClickUnfavorite = () => {
-    dispatch(removefavoritehotel(hotel.hotel_id));
-  };
-
-  useEffect(() => {
-    getDetailHotel();
-  }, []);
+  const favoriteHotels = useSelector((state) => state.hotels.hotels.favorites);
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ backgroundColor: "#fff" }}
-    >
+    <ScrollView>
       <ImageBackground
         style={styles.headerImage}
-        source={{ require: "../../assets/images/hotel.jpg" }}
+        source={require("../../../assets/hotel.jpg")}
       >
         <View style={styles.header}>
           <Icon
-            name="arrow-left"
-            size={25}
-            color="#fff"
-            onPress={() => navigation.goBack()}
+            name="arrow-back"
+            color="#ffffff"
+            size={28}
+            onPress={navigation.goBack}
           />
-          {isFavorite ? (
+
+          {favoriteHotels.find((hotel) => hotel.hotel_id === feed.hotel_id) ? (
             <Icon
-              name="heart"
-              size={25}
-              color="#FF0000"
-              onPress={handleClickUnfavorite}
+              name="favorite"
+              color="#f00"
+              size={28}
+              onPress={() => dispatch(removefavoritehotel(feed?.hotel_id))}
             />
           ) : (
             <Icon
-              name="heart-outline"
-              color="#fff"
-              size={25}
-              onPress={handleClickFavorite}
+              name="favorite-outline"
+              color="#ffffff"
+              size={28}
+              onPress={() => dispatch(addfavoritehotel(feed))}
             />
           )}
         </View>
       </ImageBackground>
 
-      <View style={styles.iconContainer}>
-        <Icon name="map-marker" size={25} color="#fff" />
+      <View style={styles.containerDetail}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text style={styles.title}>{feed.name}</Text>
+          <Text style={{ fontSize: 18, color: "#000" }}>
+            ${feed.number_of_rooms}/Night
+          </Text>
+        </View>
+        <Text style={styles.location}>
+          {feed.city}, {feed.address}
+        </Text>
+        <Text style={styles.description}>{feed.hotel_description}</Text>
       </View>
+
+      <TouchableOpacity
+        style={styles.book}
+        onPress={() => {
+          if (isAuthenticated) {
+            dispatch(addbookinghotel(feed));
+            navigation.navigate(goBack);
+          } else {
+            navigation.navigate("Login");
+          }
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 20,
+            color: "#ffffff",
+            fontWeight: "bold",
+          }}
+        >
+          Book
+        </Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
-//
 
 const styles = StyleSheet.create({
   headerImage: {
@@ -101,11 +105,33 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 40,
     overflow: "hidden",
   },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  containerDetail: {
+    marginTop: 20,
+    paddingHorizontal: 20,
+  },
+  book: {
+    marginTop: 20,
+    height: 50,
+    width: "auto",
+    borderRadius: 10,
+    backgroundColor: "#00008B",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  location: {
+    fontSize: 12,
+    fontWeight: "400",
+    color: "#908e8c",
+    marginTop: 5,
+  },
   header: {
     marginTop: 60,
     flexDirection: "row",
     alignItems: "center",
-    marginHorizontal: 20,
     justifyContent: "space-between",
   },
   container: {
@@ -122,6 +148,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 30,
+  },
+  description: {
+    marginTop: 20,
+    lineHeight: 22,
   },
   textTitle: {
     fontSize: 20,
@@ -179,6 +209,5 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
-}
 
 export default DetailHotel;

@@ -19,7 +19,7 @@ const ListInput = ({ label, value, data, setData, handleOpenEdit, handleEditData
         >
             <ListItem bottomDivider containerStyle={{ padding: 5 }}>
                 <ListItem.Content style={styles.inputEdit}>
-                    <TextInput placeholder="First name" onChangeText={(e) => setData({ ...data, value: e })} style={styles.textInput} value={data.value} />
+                    <TextInput placeholder="Full name" onChangeText={(e) => setData({ ...data, value: e })} style={styles.textInput} value={data.value} />
                     <Button onPress={() => handleEditData()} containerStyle={{ marginLeft: 15 }} titleStyle={{ fontSize: 14, paddingHorizontal: 10 }} title="Change" />
                 </ListItem.Content>
             </ListItem>
